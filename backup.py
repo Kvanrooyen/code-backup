@@ -3,6 +3,7 @@ import shutil
 import datetime
 import time
 import sys
+import glob
 
 # Current day and month
 today = datetime.date.today().strftime("%d-%m")
@@ -68,18 +69,18 @@ def project_menu():
 
     for item in range(0, count):
         # Number the items in the lsit based of number of projects in src
-        # NOTE Int value, refer to language menu for selection
+        # NOTE Int value. Same as language_menu_items
         list_project_num.append(item + 1)
 
     for item in range(0, count):
         # Seperate each item and add it to corresponding number value from previous for loop
         elt = (os.listdir(src_dir))[item]
+        # NOTE String value. Same as language_menu_items
         list_project_name.append(elt)
 
     # Convert the lists to a dictionary
     src_dir_items = dict(zip(list_project_num, list_project_name))
 
-    # TODO Test for incorrect value input
     while True:
         print('What project do you want to backup.\n')
         # NOTE https://www.techbeamers.com/python-program-convert-lists-dictionary/
@@ -89,7 +90,9 @@ def project_menu():
             project_choice = int(input('project menu >> '))
             if 0 < project_choice < total_items:
                 # User entered valid project
-                # NOTE [project_choice - 1] - 1 is used to give the correct value, becuase I + 1 when getting list_project_num
+                # NOTE [project_choice - 1] the - 1 is used to give the correct list number.
+                # When creating list_project_num the +1 gets rid of the 0, when displaying
+                # it does not do so when selecting the number, hence the -1
                 print(
                     f'\n{list_project_name[project_choice - 1]}, has been selected to be backed up. Proceeding to next step.')
                 backup_project = src_dir_items.get(project_choice)
@@ -108,8 +111,8 @@ def unknown_command():
 
 
 def git_backup():
-    # TODO Backup to GitHub OneDrive folder
-    # NOTE Projects need to be zipped before being copied to their backup
+    # NOTE Project is chosen first, then the project langauge, then the project is zipped
+    # after being zipped it gets moved to the backup location
     project_menu()
     language_menu()
     zip_project(f'{backup_project}--{today}',
@@ -118,8 +121,8 @@ def git_backup():
 
 
 def external_backup():
-    # TODO Backup to external drive
-    # NOTE Projects need to be zipped before being copied to their backup
+    # NOTE Project is chosen first, then the project langauge, then the project is zipped
+    # after being zipped it gets moved to the backup location
     project_menu()
     language_menu()
     zip_project(f'{backup_project}--{today}',
@@ -127,7 +130,17 @@ def external_backup():
     print('Proceeding to move project to External Drive backup location.')
 
 
-# def move_project(backup_location):
+def move_project(backup_location):
+    # NOTE Move zip folder to backup location
+    # Make sure the current directory is the src_dir
+    os.chdir(src_dir)
+    # Searches the directory for zip files to move.
+    try:
+        for file in glob.glob(backup_project + '.zip'):
+            shutil.move(src_dir + file, backup_location)
+        print('\nSuccesfully moved the project to the backup location.')
+    except OSError as e:
+        print(f'Error has occured.\n{e}')
 
 
 def zip_project(output_name, project_src_dir):
@@ -136,7 +149,7 @@ def zip_project(output_name, project_src_dir):
 
 
 menu = {
-    "0": sys.exit,  # FIXME Throws error in debuger
+    "0": sys.exit,
     "1": external_backup,
     "2": git_backup
 }
@@ -147,4 +160,5 @@ while True:
     print('\nChoose a backup option. Type only the number.')
     print('[0] Exit\n[1] External Drive\n[2] Git\n')
     choice = input('main menu >> ')
+    # FIXME Throws error when exiting with sys.exit
     menu.get(choice, unknown_command)()
