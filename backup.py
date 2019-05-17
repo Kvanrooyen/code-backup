@@ -155,9 +155,9 @@ def zip_project(output_name, project_src_dir):
 
 
 menu = {
-    "0": sys.exit,
-    "1": external_backup,
-    "2": git_backup
+    0: sys.exit,
+    1: external_backup,
+    2: git_backup
 }
 
 while True:
@@ -165,6 +165,6 @@ while True:
     os.chdir(src_dir)
     print('\nChoose a backup option. Type only the number.')
     print('[0] Exit\n[1] External Drive\n[2] Git\n')
-    choice = input('main menu >> ')
+    choice = int(input('main menu >> '))
     # FIXME Throws error when exiting with sys.exit
     menu.get(choice, unknown_command)()
