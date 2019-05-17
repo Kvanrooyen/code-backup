@@ -12,7 +12,7 @@ src_dir = r'C:\Users\kvanr\Desktop\Working Drive\\'
 # Location of External backup
 external_dir = r'D:\Code\2019\\'
 # Location of GitHub backup
-git_dir = r'C:\Users\kvanr\OneDrive\GitHub-Backup\Project-Archive\2019\\'
+git_dir = r'C:\Users\kvanr\OneDrive\GitHub - Backup\Project-Archive\2019\\'
 
 
 def title():
@@ -120,9 +120,8 @@ def git_backup():
     zip_project(f'{backup_project}--{today}',
                 os.path.join(src_dir + backup_project))
     print('Proceeding to move project to GitHub backup location.')
-    # FIXME location not found
-    backup_location = os.path.join(git_dir + backup_language)
-    move_project(backup_location)
+    move_project(git_dir + backup_language)
+    os.system('cls')
 
 
 def external_backup():
@@ -133,8 +132,8 @@ def external_backup():
     zip_project(f'{backup_project}--{today}',
                 os.path.join(src_dir + backup_project))
     print('Proceeding to move project to External Drive backup location.')
-    # FIXME location not found
     move_project(external_dir + backup_language)
+    os.system('cls')
 
 
 def move_project(backup_location):
@@ -145,7 +144,7 @@ def move_project(backup_location):
     try:
         for file in glob.glob(f'{backup_project}--{today}.zip'):
             shutil.move(src_dir + file, backup_location)
-        print('\nSuccesfully moved the project to the backup location.')
+        print('Succesfully moved the project to the backup location.')
     except OSError as e:
         print(f'Error has occured.\n{e}')
 
