@@ -136,6 +136,31 @@ def external_backup():
     os.system('cls')
 
 
+def everything_backup():
+    # NOTE Will backup to both exeternal and git
+    project_menu()
+    language_menu()
+    zip_project(f'{backup_project}--{today}',
+                os.path.join(src_dir + backup_project))
+    print('Project is being moved to External Drive and Git Backup')
+    copy_project(external_dir + backup_language)
+    print('Project has been copied to External')
+    move_project(git_dir + backup_language)
+
+
+def copy_project(backup_location):
+    # NOTE Copy zip folder to backup location
+    # Make sure the current directory is the src_dir
+    os.chdir(src_dir)
+    # Searches the directory for zip files to move.
+    try:
+        for file in glob.glob(f'{backup_project}--{today}.zip'):
+            shutil.copy(src_dir + file, backup_location)
+        print('Succesfully copied the project to the backup location.')
+    except OSError as e:
+        print(f'Error has occured.\n{e}')
+
+
 def move_project(backup_location):
     # NOTE Move zip folder to backup location
     # Make sure the current directory is the src_dir
@@ -157,14 +182,15 @@ def zip_project(output_name, project_src_dir):
 menu = {
     0: sys.exit,
     1: external_backup,
-    2: git_backup
+    2: git_backup,
+    3: everything_backup
 }
 
 while True:
     # Set the current working directory to the src_dir
     os.chdir(src_dir)
     print('\nChoose a backup option. Type only the number.')
-    print('[0] Exit\n[1] External Drive\n[2] Git\n')
+    print('[0] Exit\n[1] External Drive\n[2] Git\n[3] Backup all\n')
     choice = int(input('main menu >> '))
     # FIXME Throws error when exiting with sys.exit
     menu.get(choice, unknown_command)()
