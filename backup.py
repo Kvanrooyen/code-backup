@@ -14,17 +14,6 @@ external_dir = r'D:\Code\2019\\'
 # Location of GitHub backup
 git_dir = r'C:\Users\kvanr\OneDrive\GitHub - Backup\Project-Archive\2019\\'
 
-
-def title():
-    print(r"   _____ ____  _____  ______      ____          _____ _  ___    _ _____    ")
-    print(r"  / ____/ __ \|  __ \|  ____|    |  _ \   /\   / ____| |/ / |  | |  __ \   ")
-    print(r" | |   | |  | | |  | | |__       | |_) | /  \ | |    | ' /| |  | | |__) |  ")
-    print(r" | |   | |  | | |  | |  __|      |  _ < / /\ \| |    |  < | |  | |  ___/   ")
-    print(r" | |___| |__| | |__| | |____     | |_) / ____ \ |____| . \| |__| | |       ")
-    print(r"  \_____\____/|_____/|______|    |____/_/    \_\_____|_|\_/\____/|_|       ")
-    print('\n')
-
-
 language_menu_items = {
     1: 'C++',
     2: 'C#',
@@ -32,6 +21,14 @@ language_menu_items = {
     4: 'Python',
     5: 'Web'
 }
+
+# TODO Choose project language based on files in the project folder.
+# NOTE Project dir to find what lang project is using.
+# c++ = project_name/project_name/*.cpp
+# c# = project_name/project_name/*.cs
+# Java = project_name/project_name/*.java
+# Python = project_name/*.py
+# Web = project_name/*.html
 
 
 def language_menu():
@@ -41,7 +38,29 @@ def language_menu():
         print('Choose the language of the project. Type only the number.\n')
         print('[1] C++\n[2] C#\n[3] Java\n[4] Pyhon\n[5] Web')
         try:
-            lang_choice = int(input('language menu >> '))
+            # lang_choice = int(input('language menu >> '))
+            os.chdir(src_dir)
+            for file in os.listdir(f'{project_choice}/{project_choice}'):
+                # Check for C++
+                if file.endswith('.cpp'):
+                    lang_choice = 1
+                # Check for C#
+                elif file.endswith('.cs'):
+                    lang_choice = 2
+                # Check for Java
+                elif file.endswith('.java'):
+                    lang_choice = 3
+                else:
+                    break
+
+            for file in os.listdir(project_choice):
+                # Check for Python
+                if file.endswith('.py'):
+                    lang_choice = 4
+                # Check for Web
+                elif file.endswith('.html'):
+                    lang_choice = 5
+
             if 0 < lang_choice < 6:
                 print(
                     f'\n{language_menu_items.get(lang_choice)} is the selected langauge. Proceeding to next step.')
@@ -57,9 +76,6 @@ def language_menu():
 
 
 def project_menu():
-    os.system('cls')
-    title()  # Show the title permanently
-    # Creating backup_project as a global allows it to be used outside the function
     global backup_project
     # A pair of lists for storing the projectNo and projectName
     list_project_num = []
@@ -84,12 +100,15 @@ def project_menu():
     src_dir_items = dict(zip(list_project_num, list_project_name))
 
     while True:
+        # TODO Remove all the print statements that are not needed
         print('What project do you want to backup.\n')
         # NOTE https://www.techbeamers.com/python-program-convert-lists-dictionary/
         for item in range(0, count):
             print(f'[{list_project_num[item]}] {list_project_name[item]}')
         try:
-            project_choice = int(input('project menu >> '))
+            # TODO Automate the project choice to go through all the projects in working dir
+            # backing up one project at a time.
+ """            project_choice = int(input('project menu >> '))
             if 0 < project_choice < total_items:
                 # User entered valid project
                 # NOTE [project_choice - 1] the - 1 is used to give the correct list number.
@@ -97,7 +116,11 @@ def project_menu():
                 # it does not do so when selecting the number, hence the -1
                 print(
                     f'\n{list_project_name[project_choice - 1]}, has been selected to be backed up. Proceeding to next step.')
-                backup_project = src_dir_items.get(project_choice)
+                backup_project = src_dir_items.get(project_choice) 
+"""
+            # TODO Loop through projetcs and assign a language to project for backup
+            for i, v in enumerate()
+
             else:
                 unknown_command()
                 continue
@@ -110,30 +133,6 @@ def project_menu():
 
 def unknown_command():
     print('\nThat command is unknown.  Please try again.\n\n')
-
-
-def git_backup():
-    # NOTE Project is chosen first, then the project langauge, then the project is zipped
-    # after being zipped it gets moved to the backup location
-    project_menu()
-    language_menu()
-    zip_project(f'{backup_project}--{today}',
-                os.path.join(src_dir + backup_project))
-    print('Proceeding to move project to GitHub backup location.')
-    move_project(git_dir + backup_language)
-    os.system('cls')
-
-
-def external_backup():
-    # NOTE Project is chosen first, then the project langauge, then the project is zipped
-    # after being zipped it gets moved to the backup location
-    project_menu()
-    language_menu()
-    zip_project(f'{backup_project}--{today}',
-                os.path.join(src_dir + backup_project))
-    print('Proceeding to move project to External Drive backup location.')
-    move_project(external_dir + backup_language)
-    os.system('cls')
 
 
 def everything_backup():
@@ -177,20 +176,3 @@ def move_project(backup_location):
 def zip_project(output_name, project_src_dir):
     shutil.make_archive(output_name, 'zip', project_src_dir)
     print('Finished zipping')
-
-
-menu = {
-    0: sys.exit,
-    1: external_backup,
-    2: git_backup,
-    3: everything_backup
-}
-
-while True:
-    # Set the current working directory to the src_dir
-    os.chdir(src_dir)
-    print('\nChoose a backup option. Type only the number.')
-    print('[0] Exit\n[1] External Drive\n[2] Git\n[3] Backup all\n')
-    choice = int(input('main menu >> '))
-    # FIXME Throws error when exiting with sys.exit
-    menu.get(choice, unknown_command)()
