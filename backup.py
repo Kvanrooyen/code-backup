@@ -31,25 +31,26 @@ language_menu_items = {
 # Web = project_name/*.html
 
 
-def language_menu():
+def language_menu(project_choice):
     # Creating backup_language as global allows it to be used outside the function
     global backup_language
     while True:
-        print('Choose the language of the project. Type only the number.\n')
-        print('[1] C++\n[2] C#\n[3] Java\n[4] Pyhon\n[5] Web')
         try:
-            # lang_choice = int(input('language menu >> '))
             os.chdir(src_dir)
+            print('Starting to check for project type')
             for file in os.listdir(f'{project_choice}/{project_choice}'):
                 # Check for C++
                 if file.endswith('.cpp'):
                     lang_choice = 1
+                    print('C++')
                 # Check for C#
                 elif file.endswith('.cs'):
                     lang_choice = 2
+                    print('C#')
                 # Check for Java
                 elif file.endswith('.java'):
                     lang_choice = 3
+                    print('Java')
                 else:
                     break
 
@@ -57,9 +58,11 @@ def language_menu():
                 # Check for Python
                 if file.endswith('.py'):
                     lang_choice = 4
+                    print('Python')
                 # Check for Web
                 elif file.endswith('.html'):
                     lang_choice = 5
+                    print('Web')
 
             if 0 < lang_choice < 6:
                 print(
@@ -76,14 +79,14 @@ def language_menu():
 
 
 def project_menu():
-    global backup_project
+    global backup_project, project_choice
     # A pair of lists for storing the projectNo and projectName
     list_project_num = []
     list_project_name = []
 
     # Count the number of folder in the directory
     count = len(os.listdir(src_dir))
-    total_items = len(os.listdir(src_dir)) + 1
+    total_items = len(os.listdir(src_dir))
 
     for item in range(0, count):
         # Number the items in the lsit based of number of projects in src
@@ -98,37 +101,23 @@ def project_menu():
 
     # Convert the lists to a dictionary
     src_dir_items = dict(zip(list_project_num, list_project_name))
-
     while True:
-        # TODO Remove all the print statements that are not needed
-        print('What project do you want to backup.\n')
-        # NOTE https://www.techbeamers.com/python-program-convert-lists-dictionary/
-        for item in range(0, count):
-            print(f'[{list_project_num[item]}] {list_project_name[item]}')
         try:
-            # TODO Automate the project choice to go through all the projects in working dir
-            # backing up one project at a time.
- """            project_choice = int(input('project menu >> '))
-            if 0 < project_choice < total_items:
-                # User entered valid project
-                # NOTE [project_choice - 1] the - 1 is used to give the correct list number.
-                # When creating list_project_num the +1 gets rid of the 0, when displaying
-                # it does not do so when selecting the number, hence the -1
-                print(
-                    f'\n{list_project_name[project_choice - 1]}, has been selected to be backed up. Proceeding to next step.')
-                backup_project = src_dir_items.get(project_choice) 
-"""
-            # TODO Loop through projetcs and assign a language to project for backup
-            for i, v in enumerate()
-
-            else:
-                unknown_command()
-                continue
+            i = 0
+            while i < total_items:
+                project_choice = list_project_name[i]
+                # print(project_choice)
+                backup_project = src_dir_items.get(project_choice)
+                print(project_choice)
+                os.chdir(src_dir)
+                zip_project(f'{project_choice}--{today}',
+                            os.path.join(src_dir + project_choice))
+                language_menu(project_choice)
+                i += 1
+            break
         except ValueError:
             unknown_command()
             continue
-        else:
-            break
 
 
 def unknown_command():
@@ -138,41 +127,19 @@ def unknown_command():
 def everything_backup():
     # NOTE Will backup to both exeternal and git
     project_menu()
-    language_menu()
-    zip_project(f'{backup_project}--{today}',
-                os.path.join(src_dir + backup_project))
-    print('Project is being moved to External Drive and Git Backup')
-    copy_project(external_dir + backup_language)
-    print('Project has been copied to External')
-    move_project(git_dir + backup_language)
-
-
-def copy_project(backup_location):
-    # NOTE Copy zip folder to backup location
-    # Make sure the current directory is the src_dir
-    os.chdir(src_dir)
-    # Searches the directory for zip files to move.
-    try:
-        for file in glob.glob(f'{backup_project}--{today}.zip'):
-            shutil.copy(src_dir + file, backup_location)
-        print('Succesfully copied the project to the backup location.')
-    except OSError as e:
-        print(f'Error has occured.\n{e}')
-
-
-def move_project(backup_location):
-    # NOTE Move zip folder to backup location
-    # Make sure the current directory is the src_dir
-    os.chdir(src_dir)
-    # Searches the directory for zip files to move.
-    try:
-        for file in glob.glob(f'{backup_project}--{today}.zip'):
-            shutil.move(src_dir + file, backup_location)
-        print('Succesfully moved the project to the backup location.')
-    except OSError as e:
-        print(f'Error has occured.\n{e}')
+    # language_menu()
+   # print('Project is being moved to External Drive and Git Backup')
+    # copy_project(external_dir + backup_language)
+    # print('Project has been copied to External')
+    # move_project(git_dir + backup_language)
 
 
 def zip_project(output_name, project_src_dir):
     shutil.make_archive(output_name, 'zip', project_src_dir)
     print('Finished zipping')
+
+
+print('Start')
+time.sleep(2)
+everything_backup()
+print('End')
