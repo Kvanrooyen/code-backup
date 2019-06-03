@@ -26,7 +26,7 @@ language_menu_items = {
 }
 
 
-def language_menu(project):
+def language_choice(project):
     # Creating backup_language as global allows it to be used outside the function
     global backup_language
     while True:
@@ -88,7 +88,7 @@ def language_menu(project):
             break
 
 
-def project_menu():
+def project_choice():
     global backup_project, project_choice
     # A pair of lists for storing the projectNo and projectName
     list_project_num = []
@@ -122,7 +122,7 @@ def project_menu():
                 os.chdir(src_dir)
                 zip_project(f'{project_choice}--{today}',
                             os.path.join(src_dir + project_choice))
-                language_menu(project_choice)
+                language_choice(project_choice)
                 i += 1
             break
         except ValueError:
@@ -132,11 +132,6 @@ def project_menu():
 
 def unknown_command():
     print('\nThat command is unknown.  Please try again.\n\n')
-
-
-def everything_backup():
-    # NOTE Will backup to both exeternal and git
-    project_menu()
 
 
 def copy_project(backup_location):
@@ -170,4 +165,4 @@ def zip_project(output_name, project_src_dir):
     print('Finished zipping')
 
 
-everything_backup()
+project_choice()
