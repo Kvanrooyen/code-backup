@@ -4,6 +4,8 @@ import datetime
 import time
 import sys
 import glob
+from pathlib import Path
+
 
 # Current day and month
 today = datetime.date.today().strftime("%d-%m")
@@ -14,6 +16,7 @@ external_dir = r'D:\Code\2019\\'
 # Location of GitHub backup
 git_dir = r'C:\Users\kvanr\OneDrive\GitHub - Backup\Project-Archive\2019\\'
 
+
 language_menu_items = {
     1: 'C++',
     2: 'C#',
@@ -22,52 +25,59 @@ language_menu_items = {
     5: 'Web'
 }
 
-# TODO Choose project language based on files in the project folder.
-# NOTE Project dir to find what lang project is using.
-# c++ = project_name/project_name/*.cpp
-# c# = project_name/project_name/*.cs
-# Java = project_name/project_name/*.java
-# Python = project_name/*.py
-# Web = project_name/*.html
 
-
-def language_menu(project_choice):
+def language_menu(project):
     # Creating backup_language as global allows it to be used outside the function
     global backup_language
     while True:
         try:
-            os.chdir(src_dir)
-            print('Starting to check for project type')
-            for file in os.listdir(f'{project_choice}/{project_choice}'):
-                # Check for C++
-                if file.endswith('.cpp'):
-                    lang_choice = 1
-                    print('C++')
-                # Check for C#
-                elif file.endswith('.cs'):
-                    lang_choice = 2
-                    print('C#')
-                # Check for Java
-                elif file.endswith('.java'):
-                    lang_choice = 3
-                    print('Java')
-                else:
-                    break
 
-            for file in os.listdir(project_choice):
-                # Check for Python
-                if file.endswith('.py'):
-                    lang_choice = 4
-                    print('Python')
-                # Check for Web
-                elif file.endswith('.html'):
-                    lang_choice = 5
-                    print('Web')
+            cppProject = Path(
+                src_dir + project_choice).glob(f'{project_choice}/*.cpp')
+            csProject = Path(
+                src_dir + project_choice).glob(f'{project_choice}/*.cs')
+            javaProject = Path(
+                src_dir + project_choice).glob(f'{project_choice}/*.java')
+            pythonProject = Path(src_dir + project_choice).glob('*.py')
+            webProject = Path(src_dir + project_choice).glob('*.html')
+
+            for path in cppProject:
+                path_in_str = str(path)
+                print(path_in_str)
+                lang_choice = 1
+                break
+
+            for path in csProject:
+                path_in_str = str(path)
+                print(path_in_str)
+                lang_choice = 2
+                break
+
+            for path in javaProject:
+                path_in_str = str(path)
+                print(path_in_str)
+                lang_choice = 3
+                break
+
+            for path in pythonProject:
+                path_in_str = str(path)
+                print(path_in_str)
+                lang_choice = 4
+                break
+
+            for path in webProject:
+                path_in_str = str(path)
+                print(path_in_str)
+                lang_choice = 5
+                break
 
             if 0 < lang_choice < 6:
-                print(
-                    f'\n{language_menu_items.get(lang_choice)} is the selected langauge. Proceeding to next step.')
                 backup_language = language_menu_items.get(lang_choice)
+                print(
+                    f'{backup_language} is the selected langauge. Proceeding to next step.')
+                time.sleep(1)
+                copy_project(external_dir + backup_language)
+                move_project(git_dir + backup_language)
             else:
                 unknown_command()
                 continue
@@ -127,11 +137,32 @@ def unknown_command():
 def everything_backup():
     # NOTE Will backup to both exeternal and git
     project_menu()
-    # language_menu()
-   # print('Project is being moved to External Drive and Git Backup')
-    # copy_project(external_dir + backup_language)
-    # print('Project has been copied to External')
-    # move_project(git_dir + backup_language)
+
+
+def copy_project(backup_location):
+    # NOTE Copy zip folder to backup location
+    # Make sure the current directory is the src_dir
+    os.chdir(src_dir)
+    # Searches the directory for zip files to move.
+    try:
+        for file in glob.glob(f'{project_choice}--{today}.zip'):
+            shutil.copy(src_dir + file, backup_location)
+        print('Succesfully copied the project to the backup location.')
+    except OSError as e:
+        print(f'Error has occured.\n{e}')
+
+
+def move_project(backup_location):
+    # NOTE Move zip folder to backup location
+    # Make sure the current directory is the src_dir
+    os.chdir(src_dir)
+    # Searches the directory for zip files to move.
+    try:
+        for file in glob.glob(f'{project_choice}--{today}.zip'):
+            shutil.move(src_dir + file, backup_location)
+        print('Succesfully moved the project to the backup location.')
+    except OSError as e:
+        print('Error has occured.\n %s' % e)
 
 
 def zip_project(output_name, project_src_dir):
@@ -139,7 +170,4 @@ def zip_project(output_name, project_src_dir):
     print('Finished zipping')
 
 
-print('Start')
-time.sleep(2)
 everything_backup()
-print('End')
