@@ -22,7 +22,8 @@ language_menu_items = {
     2: 'C#',
     3: 'Java',
     4: 'Python',
-    5: 'Web'
+    5: 'Web',
+    6: 'Flutter'
 }
 
 
@@ -40,6 +41,8 @@ def language_choice(project):
                 src_dir + project_choice).glob(f'{project_choice}/*.java')
             pythonProject = Path(src_dir + project_choice).glob('*.py')
             webProject = Path(src_dir + project_choice).glob('*.html')
+            flutterProject = Path(
+                src_dir + project_choice).glob(f'{project_choice}.iml')
 
             for path in cppProject:
                 path_in_str = str(path)
@@ -71,7 +74,13 @@ def language_choice(project):
                 lang_choice = 5
                 break
 
-            if 0 < lang_choice < 6:
+            for path in flutterProject:
+                path_in_str = str(path)
+                print(path_in_str)
+                lang_choice = 6
+                break
+
+            if 0 < lang_choice < 7:
                 backup_language = language_menu_items.get(lang_choice)
                 print(
                     f'{backup_language} is the selected langauge. Proceeding to next step.')
