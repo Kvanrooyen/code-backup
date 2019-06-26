@@ -87,7 +87,7 @@ def language_choice(project):
                     f'{backup_language} is the selected langauge. Proceeding to next step.')
                 time.sleep(1)
                 copy_project(external_dir + backup_language)
-                move_project(f'{git_dir} + 2019 + {backup_language}')
+                move_project(f'{git_dir}\\2019\\{backup_language}')
             else:
                 unknown_command()
                 continue
@@ -181,11 +181,12 @@ def run_git():
     # git add .
     # git commit -m <commit message>
     os.chdir(git_dir)
-    subprocess.call(["git", "add ."])
+    subprocess.call(["git", "git add ."])
     time.sleep(1)
     print('Type your commit message: ')
     commit_msg = input('> ')
-    subprocess.call(["git", f'commit -m "{commit_msg}"'])
+    subprocess.call(["git", f'git commit -m "{commit_msg}"'])
 
 
 project_choice()
+run_git()
