@@ -4,6 +4,7 @@ import datetime
 import time
 import sys
 import glob
+import subprocess
 from pathlib import Path
 
 
@@ -14,7 +15,7 @@ src_dir = r'C:\Users\kvanr\Desktop\Working Drive\\'
 # Location of External backup
 external_dir = r'D:\Code\2019\\'
 # Location of GitHub backup
-git_dir = r'C:\Users\kvanr\OneDrive\GitHub - Backup\Project-Archive\2019\\'
+git_dir = r'C:\Users\kvanr\OneDrive\GitHub - Backup\Project-Archive\\'
 
 
 language_menu_items = {
@@ -86,7 +87,7 @@ def language_choice(project):
                     f'{backup_language} is the selected langauge. Proceeding to next step.')
                 time.sleep(1)
                 copy_project(external_dir + backup_language)
-                move_project(git_dir + backup_language)
+                move_project(f'{git_dir} + 2019 + {backup_language}')
             else:
                 unknown_command()
                 continue
@@ -172,6 +173,19 @@ def move_project(backup_location):
 def zip_project(output_name, project_src_dir):
     shutil.make_archive(output_name, 'zip', project_src_dir)
     print('Finished zipping')
+
+
+def run_git():
+    # NOTE
+    # After moving project zips to backup locations run the following:
+    # git add .
+    # git commit -m <commit message>
+    os.chdir(git_dir)
+    subprocess.call(["git", "add ."])
+    time.sleep(1)
+    print('Type your commit message: ')
+    commit_msg = input('> ')
+    subprocess.call(["git", f'commit -m "{commit_msg}"'])
 
 
 project_choice()
