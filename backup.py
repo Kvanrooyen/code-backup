@@ -180,12 +180,12 @@ def run_git():
     # After moving project zips to backup locations run the following:
     # git add .
     # git commit -m <commit message>
-    os.chdir(git_dir)
-    subprocess.call(["git", "git add ."])
+    # os.chdir(git_dir)
+    subprocess.call(["git"] + ["add", "."], cwd=git_dir)
     time.sleep(1)
     print('Type your commit message: ')
     commit_msg = input('> ')
-    subprocess.call(["git", f'git commit -m "{commit_msg}"'])
+    subprocess.call(["git"] + ["commit", "-m"] + [commit_msg], cwd=git_dir)
 
 
 project_choice()
