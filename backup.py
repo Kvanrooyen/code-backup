@@ -29,7 +29,6 @@ language_menu_items = {
 
 
 def language_choice(project):
-    # Creating backup_language as global allows it to be used outside the function
     while True:
         try:
 
@@ -44,6 +43,7 @@ def language_choice(project):
             flutterProject = Path(
                 src_dir + project_choice).glob(f'{project_choice}.iml')
 
+            # Loop through looking for a language to assign to projects
             for path in cppProject:
                 lang_choice = 1
                 break
@@ -70,8 +70,6 @@ def language_choice(project):
 
             if 0 < lang_choice < 7:
                 backup_language = language_menu_items.get(lang_choice)
-                print(
-                    f'{backup_language} is the selected langauge. Proceeding to next step.')
                 time.sleep(1)
                 copy_project(external_dir + backup_language)
                 move_project(f'{git_dir}\\2019\\{backup_language}')
@@ -97,13 +95,12 @@ def project_choice():
 
     for item in range(0, count):
         # Number the items in the list based of number of projects in src
-        # NOTE Int value. Same as language_menu_items
         list_project_num.append(item + 1)
 
     for item in range(0, count):
-        # Separate each item and add it to corresponding number value from previous for loop
+        # Separate each item and add it to corresponding number value
+        # from previous for loop
         elt = (os.listdir(src_dir))[item]
-        # NOTE String value. Same as language_menu_items
         list_project_name.append(elt)
 
     # Convert the lists to a dictionary
@@ -132,7 +129,7 @@ def unknown_command():
 
 
 def copy_project(backup_location):
-    # NOTE Copy zip folder to backup location
+    # Copy zip folder to backup location
     # Make sure the current directory is the src_dir
     os.chdir(src_dir)
     # Searches the directory for zip files to move.
@@ -145,7 +142,7 @@ def copy_project(backup_location):
 
 
 def move_project(backup_location):
-    # NOTE Move zip folder to backup location
+    # Move zip folder to backup location
     # Make sure the current directory is the src_dir
     os.chdir(src_dir)
     # Searches the directory for zip files to move.
