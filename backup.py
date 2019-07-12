@@ -30,7 +30,6 @@ language_menu_items = {
 
 def language_choice(project):
     # Creating backup_language as global allows it to be used outside the function
-    global backup_language
     while True:
         try:
 
@@ -87,7 +86,7 @@ def language_choice(project):
 
 
 def project_choice():
-    global backup_project, project_choice
+    global project_choice
     # A pair of lists for storing the projectNo and projectName
     list_project_num = []
     list_project_name = []
@@ -97,12 +96,12 @@ def project_choice():
     total_items = len(os.listdir(src_dir))
 
     for item in range(0, count):
-        # Number the items in the lsit based of number of projects in src
+        # Number the items in the list based of number of projects in src
         # NOTE Int value. Same as language_menu_items
         list_project_num.append(item + 1)
 
     for item in range(0, count):
-        # Seperate each item and add it to corresponding number value from previous for loop
+        # Separate each item and add it to corresponding number value from previous for loop
         elt = (os.listdir(src_dir))[item]
         # NOTE String value. Same as language_menu_items
         list_project_name.append(elt)
@@ -140,9 +139,9 @@ def copy_project(backup_location):
     try:
         for file in glob.glob(f'{project_choice}--{today}.zip'):
             shutil.copy(src_dir + file, backup_location)
-        print('Succesfully copied the project to the backup location.')
+        print('Successfully copied the project to the backup location.')
     except OSError as e:
-        print(f'Error has occured.\n{e}')
+        print(f'Error has occurred.\n{e}')
 
 
 def move_project(backup_location):
@@ -153,9 +152,9 @@ def move_project(backup_location):
     try:
         for file in glob.glob(f'{project_choice}--{today}.zip'):
             shutil.move(src_dir + file, backup_location)
-        print('Succesfully moved the project to the backup location.')
+        print('Successfully moved the project to the backup location.')
     except OSError as e:
-        print('Error has occured.\n %s' % e)
+        print('Error has occurred.\n %s' % e)
 
 
 def zip_project(output_name, project_src_dir):
