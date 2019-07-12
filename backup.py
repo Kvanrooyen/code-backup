@@ -1,7 +1,6 @@
 import os
 import shutil
 import datetime
-import time
 import sys
 import glob
 import subprocess
@@ -70,7 +69,6 @@ def language_choice(project):
 
             if 0 < lang_choice < 7:
                 backup_language = language_menu_items.get(lang_choice)
-                time.sleep(1)
                 copy_project(external_dir + backup_language)
                 move_project(f'{git_dir}\\2019\\{backup_language}')
             else:
@@ -166,7 +164,6 @@ def run_git():
     # git commit -m <commit message>
     # os.chdir(git_dir)
     subprocess.call(["git"] + ["add", "."], cwd=git_dir)
-    time.sleep(1)
     print('Type your commit message: ')
     commit_msg = input('> ')
     subprocess.call(["git"] + ["commit", "-m"] + [commit_msg], cwd=git_dir)
