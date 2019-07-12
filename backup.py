@@ -46,38 +46,26 @@ def language_choice(project):
                 src_dir + project_choice).glob(f'{project_choice}.iml')
 
             for path in cppProject:
-                path_in_str = str(path)
-                print(path_in_str)
                 lang_choice = 1
                 break
 
             for path in csProject:
-                path_in_str = str(path)
-                print(path_in_str)
                 lang_choice = 2
                 break
 
             for path in javaProject:
-                path_in_str = str(path)
-                print(path_in_str)
                 lang_choice = 3
                 break
 
             for path in pythonProject:
-                path_in_str = str(path)
-                print(path_in_str)
                 lang_choice = 4
                 break
 
             for path in webProject:
-                path_in_str = str(path)
-                print(path_in_str)
                 lang_choice = 5
                 break
 
             for path in flutterProject:
-                path_in_str = str(path)
-                print(path_in_str)
                 lang_choice = 6
                 break
 
