@@ -1,0 +1,1 @@
+pyinstaller backup.py --onefile
