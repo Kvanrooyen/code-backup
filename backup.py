@@ -9,12 +9,15 @@ from pathlib import Path
 
 # Current day and month
 today = datetime.date.today().strftime("%d-%m")
+# User directory
+user_dir = os.environ['USERPROFILE']
 # Working Drive directory
-src_dir = r'C:\Users\kvanr\Desktop\Working Drive\\'
-# Location of External backup
-external_dir = r'D:\Code\2019\\'
+src_dir = os.path.join(user_dir, "Desktop", "Working Drive")
 # Location of GitHub backup
-git_dir = r'C:\Users\kvanr\OneDrive\GitHub - Backup\Project-Archive\\'
+git_dir = os.path.join(user_dir, "OneDrive",
+                       "GitHub - Backup", "Project-Archive", "2019")
+# Location of External backup
+external_dir = r'D:\Code\2019'
 
 
 language_menu_items = {
@@ -30,47 +33,55 @@ language_menu_items = {
 def language_choice(project):
     while True:
         try:
-
+            # C++
             cppProject = Path(
                 src_dir + project_choice).glob(f'{project_choice}/*.cpp')
+            # C#
             csProject = Path(
                 src_dir + project_choice).glob(f'{project_choice}/*.cs')
+            # Java
             javaProject = Path(
                 src_dir + project_choice).glob(f'{project_choice}/*.java')
+            # Python
             pythonProject = Path(src_dir + project_choice).glob('*.py')
+            # Web
             webProject = Path(src_dir + project_choice).glob('*.html')
+            # Flutter
             flutterProject = Path(
                 src_dir + project_choice).glob(f'{project_choice}.iml')
 
             # Loop through looking for a language to assign to projects
-            for path in cppProject:
+            for file in cppProject:
                 lang_choice = 1
                 break
 
-            for path in csProject:
+            for file in csProject:
                 lang_choice = 2
                 break
 
-            for path in javaProject:
+            for file in javaProject:
                 lang_choice = 3
                 break
 
-            for path in pythonProject:
+            for file in pythonProject:
                 lang_choice = 4
                 break
 
-            for path in webProject:
+            for file in webProject:
                 lang_choice = 5
                 break
 
-            for path in flutterProject:
+            for file in flutterProject:
                 lang_choice = 6
                 break
 
             if 0 < lang_choice < 7:
+                # Give backup_language the value of whatever langauge was found
                 backup_language = language_menu_items.get(lang_choice)
-                copy_project(external_dir + backup_language)
-                move_project(f'{git_dir}\\2019\\{backup_language}')
+                # Copies project to external drive
+                copy_project(os.path.join(external_dir, backup_language))
+                # Moves project to git directory - OneDrive
+                move_project(os.path.join(git_dir, backup_language))
             else:
                 unknown_command()
                 continue
@@ -108,7 +119,6 @@ def project_choice():
             i = 0
             while i < total_items:
                 project_choice = list_project_name[i]
-                # print(project_choice)
                 backup_project = src_dir_items.get(project_choice)
                 print(project_choice)
                 os.chdir(src_dir)
