@@ -1,7 +1,6 @@
 import os
 import shutil
 import datetime
-import sys
 import glob
 import subprocess
 from pathlib import Path
@@ -29,51 +28,21 @@ language_menu_items = {
     6: 'Flutter'
 }
 
+lang_extensions = ['cpp', 'cs', 'java', 'py', 'html', 'iml']
+
+
+def get_extension(ext):
+    return list(Path(src_dir, project_choice).glob(f'*.{ext}'))
+
 
 def language_choice(project):
     while True:
         try:
-            # C++
-            cppProject = Path(
-                src_dir + project_choice).glob(f'{project_choice}/*.cpp')
-            # C#
-            csProject = Path(
-                src_dir + project_choice).glob(f'{project_choice}/*.cs')
-            # Java
-            javaProject = Path(
-                src_dir + project_choice).glob(f'{project_choice}/*.java')
-            # Python
-            pythonProject = Path(src_dir + project_choice).glob('*.py')
-            # Web
-            webProject = Path(src_dir + project_choice).glob('*.html')
-            # Flutter
-            flutterProject = Path(
-                src_dir + project_choice).glob(f'{project_choice}.iml')
-
-            # Loop through looking for a language to assign to projects
-            for file in cppProject:
-                lang_choice = 1
-                break
-
-            for file in csProject:
-                lang_choice = 2
-                break
-
-            for file in javaProject:
-                lang_choice = 3
-                break
-
-            for file in pythonProject:
-                lang_choice = 4
-                break
-
-            for file in webProject:
-                lang_choice = 5
-                break
-
-            for file in flutterProject:
-                lang_choice = 6
-                break
+            lang_choice = 0
+            for index, lang in enumerate(lang_extensions):
+                if len(get_extension(lang)) > 0:
+                    lang_choice = index + 1
+                    break
 
             if 0 < lang_choice < 7:
                 # Give backup_language the value of whatever langauge was found
@@ -123,7 +92,7 @@ def project_choice():
                 print(project_choice)
                 os.chdir(src_dir)
                 zip_project(f'{project_choice}--{today}',
-                            os.path.join(src_dir + project_choice))
+                            os.path.join(src_dir, project_choice))
                 language_choice(project_choice)
                 i += 1
             break
@@ -143,20 +112,20 @@ def copy_project(backup_location):
     # Searches the directory for zip files to move.
     try:
         for file in glob.glob(f'{project_choice}--{today}.zip'):
-            shutil.copy(src_dir + file, backup_location)
+            shutil.copy(os.path.join(src_dir, file), backup_location)
         print('Successfully copied the project to the backup location.')
     except OSError as e:
         print(f'Error has occurred.\n{e}')
 
 
 def move_project(backup_location):
-    # Move zip folder to backup location
     # Make sure the current directory is the src_dir
     os.chdir(src_dir)
     # Searches the directory for zip files to move.
     try:
         for file in glob.glob(f'{project_choice}--{today}.zip'):
-            shutil.move(src_dir + file, backup_location)
+            # Move zip folder to backup location
+            shutil.move(os.path.join(src_dir, file), backup_location)
         print('Successfully moved the project to the backup location.')
     except OSError as e:
         print('Error has occurred.\n %s' % e)
