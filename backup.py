@@ -31,8 +31,14 @@ language_menu_items = {
 lang_extensions = ['cpp', 'cs', 'java', 'py', 'html', 'iml']
 
 
-def get_extension(ext):
+# Checking for projects where the main project folder is not in a subdirectory
+def get_project_lang(ext):
     return list(Path(src_dir, project_choice).glob(f'*.{ext}'))
+
+
+# Checking for projects where the main project folder is in a subdirectory
+def get_project_lang_alt(ext):
+    return list(Path(src_dir, project_choice).glob(f'{project_choice}/*.{ext}'))
 
 
 def language_choice(project):
@@ -40,7 +46,10 @@ def language_choice(project):
         try:
             lang_choice = 0
             for index, lang in enumerate(lang_extensions):
-                if len(get_extension(lang)) > 0:
+                if len(get_project_lang(lang)) > 0:
+                    lang_choice = index + 1
+                    break
+                elif len(get_project_lang_alt(lang)) > 0:
                     lang_choice = index + 1
                     break
 
@@ -149,4 +158,4 @@ def run_git():
 
 
 project_choice()
-run_git()
+# run_git()
