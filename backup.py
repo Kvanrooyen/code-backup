@@ -2,7 +2,7 @@ import os
 import shutil
 import datetime
 import glob
-import subprocess
+from git_command import run_git
 from pathlib import Path
 
 
@@ -90,14 +90,11 @@ def project_choice():
         elt = (os.listdir(src_dir))[item]
         list_project_name.append(elt)
 
-    # Convert the lists to a dictionary
-    src_dir_items = dict(zip(list_project_num, list_project_name))
     while True:
         try:
             i = 0
             while i < total_items:
                 project_choice = list_project_name[i]
-                backup_project = src_dir_items.get(project_choice)
                 print(project_choice)
                 os.chdir(src_dir)
                 zip_project(f'{project_choice}--{today}',
@@ -111,7 +108,7 @@ def project_choice():
 
 
 def unknown_command():
-    print('\nThat command is unknown.  Please try again.\n\n')
+    print('\nThat command is unknown. Please try again.\n\n')
 
 
 def copy_project(backup_location):
@@ -143,19 +140,3 @@ def move_project(backup_location):
 def zip_project(output_name, project_src_dir):
     shutil.make_archive(output_name, 'zip', project_src_dir)
     print('Finished zipping')
-
-
-def run_git():
-    # NOTE
-    # After moving project zips to backup locations run the following:
-    # git add .
-    # git commit -m <commit message>
-    # os.chdir(git_dir)
-    subprocess.call(["git"] + ["add", "."], cwd=git_dir)
-    print('Type your commit message: ')
-    commit_msg = input('> ')
-    subprocess.call(["git"] + ["commit", "-m"] + [commit_msg], cwd=git_dir)
-
-
-project_choice()
-# run_git()

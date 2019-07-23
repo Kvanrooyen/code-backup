@@ -1,1 +1,1 @@
-pyinstaller backup.py --onefile
+pyinstaller run.py --onefile
