@@ -25,20 +25,16 @@ language_menu_items = {
     3: 'Java',
     4: 'Python',
     5: 'Web',
-    6: 'Flutter'
+    6: 'Flutter',
+    7: 'Web'
 }
 
-lang_extensions = ['cpp', 'cs', 'java', 'py', 'html', 'iml']
+lang_extensions = ['cpp', 'cs', 'java', 'py', 'html', 'iml', 'css']
 
 
 # Checking for projects where the main project folder is not in a subdirectory
 def get_project_lang(ext):
-    return list(Path(src_dir, project_choice).glob(f'*.{ext}'))
-
-
-# Checking for projects where the main project folder is in a subdirectory
-def get_project_lang_alt(ext):
-    return list(Path(src_dir, project_choice).glob(f'{project_choice}/*.{ext}'))
+    return list(Path(src_dir, project_choice).glob(f'**/*.{ext}'))
 
 
 def language_choice(project):
@@ -49,11 +45,8 @@ def language_choice(project):
                 if len(get_project_lang(lang)) > 0:
                     lang_choice = index + 1
                     break
-                elif len(get_project_lang_alt(lang)) > 0:
-                    lang_choice = index + 1
-                    break
 
-            if 0 < lang_choice < 7:
+            if 0 < lang_choice < 8:
                 # Give backup_language the value of whatever langauge was found
                 backup_language = language_menu_items.get(lang_choice)
                 # Copies project to external drive
