@@ -49,14 +49,20 @@ def language_choice(project):
             if 0 < lang_choice < 8:
                 # Give backup_language the value of whatever langauge was found
                 backup_language = language_menu_items.get(lang_choice)
+                # TODO - Show progress of backup in a progress bar.
+                # ! Issue #5 on GitHub
                 # Copies project to external drive
                 copy_project(os.path.join(external_dir, backup_language))
                 # Moves project to git directory - OneDrive
                 move_project(os.path.join(git_dir, backup_language))
             else:
+                # ! BUG - Throws and infinite loop when an error occurs.
+                # ! Issue #7 on GitHub
                 unknown_command()
                 continue
         except ValueError:
+            # ! BUG - Throws and infinite loop when an error occurs.
+            # ! Issue #7 on GitHub
             unknown_command()
             continue
         else:
@@ -96,11 +102,15 @@ def project_choice():
                 i += 1
             break
         except ValueError:
+            # ! BUG - Throws and infinite loop when an error occurs.
+            # ! Issue #7 on GitHub
             unknown_command()
             continue
 
 
 def unknown_command():
+    # TODO - Create a better general error message.
+    # ! Issue #6 on GitHub
     print('\nThat command is unknown. Please try again.\n\n')
 
 

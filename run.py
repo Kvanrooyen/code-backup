@@ -4,6 +4,7 @@ from git_command import run_git
 
 
 def main():
+    # Check whether or not the External Drive is connected/available
     if os.path.isdir(external_dir):
         project_choice()
         run_git()
