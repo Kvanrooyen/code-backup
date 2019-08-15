@@ -50,21 +50,22 @@ def language_choice(project):
                 # Give backup_language the value of whatever langauge was found
                 backup_language = language_menu_items.get(lang_choice)
                 # TODO - Show progress of backup in a progress bar.
-                # ! Issue #5 on GitHub
+                # Issue #5 on GitHub
                 # Copies project to external drive
                 copy_project(os.path.join(external_dir, backup_language))
                 # Moves project to git directory - OneDrive
                 move_project(os.path.join(git_dir, backup_language))
             else:
                 # ! BUG - Throws and infinite loop when an error occurs.
-                # ! Issue #7 on GitHub
-                unknown_command()
-                continue
-        except ValueError:
+                # Issue #7 on GitHub
+                # ! replace with new relevant error message function
+                general_error()
+                print("Error is related to choosing a language for the project.")
+        except ValueError as e:
             # ! BUG - Throws and infinite loop when an error occurs.
-            # ! Issue #7 on GitHub
-            unknown_command()
-            continue
+            # Issue #7 on GitHub
+            # ! replace with new relevant error message function
+            specific_error(e)
         else:
             break
 
@@ -101,17 +102,22 @@ def project_choice():
                 language_choice(project_choice)
                 i += 1
             break
-        except ValueError:
+        except ValueError as e:
             # ! BUG - Throws and infinite loop when an error occurs.
-            # ! Issue #7 on GitHub
-            unknown_command()
-            continue
+            # Issue #7 on GitHub
+            # ! replace with new relevant error message function
+            specific_error(e)
 
 
-def unknown_command():
-    # TODO - Create a better general error message.
-    # ! Issue #6 on GitHub
-    print('\nThat command is unknown. Please try again.\n\n')
+def general_error():
+    # General error message, used when not handling specific error.
+    print("An error has occured!")
+
+
+def specific_error(err_msg):
+    # TODO - Add a simple summary of why the error may have occured.
+    # TODO - Show detailed message of error after summary
+    print("An error has occured! Error details:\n %s" % err_msg)
 
 
 def copy_project(backup_location):
@@ -124,7 +130,7 @@ def copy_project(backup_location):
             shutil.copy(os.path.join(src_dir, file), backup_location)
         print('Successfully copied the project to the backup location.')
     except OSError as e:
-        print(f'Error has occurred.\n{e}')
+        specific_error(e)
 
 
 def move_project(backup_location):
@@ -137,7 +143,7 @@ def move_project(backup_location):
             shutil.move(os.path.join(src_dir, file), backup_location)
         print('Successfully moved the project to the backup location.')
     except OSError as e:
-        print('Error has occurred.\n %s' % e)
+        specific_error(e)
 
 
 def zip_project(output_name, project_src_dir):
