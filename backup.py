@@ -56,18 +56,12 @@ def language_choice(project):
                 # Moves project to git directory - OneDrive
                 move_project(os.path.join(git_dir, backup_language))
             else:
-                # ! BUG - Throws and infinite loop when an error occurs.
-                # Issue #7 on GitHub
-                # ! replace with new relevant error message function
                 general_error()
                 print("Error is related to choosing a language for the project.")
         except ValueError as e:
-            # ! BUG - Throws and infinite loop when an error occurs.
-            # Issue #7 on GitHub
-            # ! replace with new relevant error message function
             specific_error(e)
-        else:
-            break
+        # else:
+        #     break
 
 
 def project_choice():
@@ -103,9 +97,6 @@ def project_choice():
                 i += 1
             break
         except ValueError as e:
-            # ! BUG - Throws and infinite loop when an error occurs.
-            # Issue #7 on GitHub
-            # ! replace with new relevant error message function
             specific_error(e)
 
 
@@ -115,8 +106,7 @@ def general_error():
 
 
 def specific_error(err_msg):
-    # TODO - Add a simple summary of why the error may have occured.
-    # TODO - Show detailed message of error after summary
+    # err_msg is used to display the full error message
     print("An error has occured! Error details:\n %s" % err_msg)
 
 
@@ -126,9 +116,15 @@ def copy_project(backup_location):
     os.chdir(src_dir)
     # Searches the directory for zip files to move.
     try:
-        for file in glob.glob(f'{project_choice}--{today}.zip'):
-            shutil.copy(os.path.join(src_dir, file), backup_location)
-        print('Successfully copied the project to the backup location.')
+        for project_zip_file in glob.glob(f'{project_choice}--{today}.zip'):
+            # Check if the file exists in the directory before copying
+            if os.path.isfile(os.path.join(backup_location, project_zip_file)):
+                os.remove(os.path.join(backup_location, project_zip_file))
+
+            # Copy zip file to external HDD -- backup_location
+            shutil.copy(os.path.join(
+                src_dir, project_zip_file), backup_location)
+            print('Successfully copied the project to the backup location.')
     except OSError as e:
         specific_error(e)
 
@@ -138,10 +134,15 @@ def move_project(backup_location):
     os.chdir(src_dir)
     # Searches the directory for zip files to move.
     try:
-        for file in glob.glob(f'{project_choice}--{today}.zip'):
-            # Move zip folder to backup location
-            shutil.move(os.path.join(src_dir, file), backup_location)
-        print('Successfully moved the project to the backup location.')
+        for project_zip_file in glob.glob(f'{project_choice}--{today}.zip'):
+            # Check if the file exists in the directory before copying
+            if os.path.isfile(os.path.join(backup_location, project_zip_file)):
+                os.remove(os.path.join(backup_location, project_zip_file))
+
+            # Move zip file to backup location
+            shutil.move(os.path.join(
+                src_dir, project_zip_file), backup_location)
+            print('Successfully moved the project to the backup location.')
     except OSError as e:
         specific_error(e)
 
