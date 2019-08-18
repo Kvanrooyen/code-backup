@@ -1,3 +1,4 @@
+![License](https://img.shields.io/github/license/Kvanrooyen/code-backup) ![Version](https://img.shields.io/github/release/Kvanrooyen/code-backup) ![Last Commit](https://img.shields.io/github/last-commit/Kvanrooyen/code-backup)
 # code-backup
 
 A backup script for backing up my projects
