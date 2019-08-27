@@ -55,13 +55,13 @@ def language_choice(project):
                 copy_project(os.path.join(external_dir, backup_language))
                 # Moves project to git directory - OneDrive
                 move_project(os.path.join(git_dir, backup_language))
+                # Break out of while loop to continue with project_choice()
+                break
             else:
                 general_error()
                 print("Error is related to choosing a language for the project.")
         except ValueError as e:
             specific_error(e)
-        # else:
-        #     break
 
 
 def project_choice():
