@@ -1,11 +1,6 @@
 import subprocess
 import os
-
-# User directory
-user_dir = os.environ['USERPROFILE']
-# Location of GitHub backup
-git_dir = os.path.join(user_dir, "OneDrive",
-                       "GitHub - Backup", "Project-Archive", "2019")
+from backup import git_dir, user_dir
 
 
 def run_git():

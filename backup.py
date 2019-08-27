@@ -2,7 +2,6 @@ import os
 import shutil
 import datetime
 import glob
-from git_command import run_git
 from pathlib import Path
 
 
@@ -11,10 +10,9 @@ today = datetime.date.today().strftime("%d-%m")
 # User directory
 user_dir = os.environ['USERPROFILE']
 # Working Drive directory
-src_dir = os.path.join(user_dir, "Desktop", "Working Drive")
+src_dir = Path(user_dir + "/Desktop/Working Drive/")
 # Location of GitHub backup
-git_dir = os.path.join(user_dir, "OneDrive",
-                       "GitHub - Backup", "Project-Archive", "2019")
+git_dir = Path(user_dir + "/OneDrive/GitHub - Backup/Project-Archive/2019/")
 # Location of External backup
 external_dir = r'D:\Code\2019'
 
@@ -52,9 +50,9 @@ def language_choice(project):
                 # TODO - Show progress of backup in a progress bar.
                 # Issue #5 on GitHub
                 # Copies project to external drive
-                copy_project(os.path.join(external_dir, backup_language))
+                copy_project(Path(external_dir, backup_language))
                 # Moves project to git directory - OneDrive
-                move_project(os.path.join(git_dir, backup_language))
+                move_project(Path(git_dir, backup_language))
                 # Break out of while loop to continue with project_choice()
                 break
             else:
