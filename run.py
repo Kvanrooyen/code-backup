@@ -2,6 +2,8 @@ import os
 from backup import external_dir, project_choice
 from git_command import run_git
 
+filename = "wd-path"
+
 
 def main():
     # Check whether or not the External Drive is connected/available

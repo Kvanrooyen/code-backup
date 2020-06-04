@@ -1,6 +1,6 @@
 import subprocess
 import os
-from backup import git_dir, user_dir
+from backup import git_dir
 
 
 def run_git():

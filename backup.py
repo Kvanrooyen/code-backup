@@ -7,32 +7,30 @@ from pathlib import Path
 
 # Current day and month
 today = datetime.date.today().strftime("%d-%m")
-# User directory
-user_dir = os.environ['USERPROFILE']
 # Working Drive directory
-src_dir = Path(user_dir + "/Desktop/Working Drive/")
+src_dir = Path("C:\\Users\\kvanr\\Desktop\\Working Drive")
 # Location of GitHub backup
-git_dir = Path(user_dir + "/OneDrive/GitHub - Backup/Project-Archive/2019/")
+git_dir = Path("D:\\OneDrive\\GitHub-Backup\\Project-Archive\\2020\\")
 # Location of External backup
-external_dir = r'D:\Code\2019'
+external_dir = Path("Z:\\GitHub-Backup\\Project-Archive\\2020\\")
 
 
 language_menu_items = {
-    1: 'C++',
-    2: 'C#',
-    3: 'Java',
-    4: 'Python',
-    5: 'Web',
-    6: 'Flutter',
+    1: 'C#',
+    2: 'Java',
+    3: 'Python',
+    4: 'Web',
+    5: 'Flutter',
+    6: 'Web',
     7: 'Web'
 }
 
-lang_extensions = ['cpp', 'cs', 'java', 'py', 'html', 'iml', 'css']
+lang_extensions = ['cs', 'java', 'py', 'html', 'iml', 'css', 'js']
 
 
 # Checking for projects where the main project folder is not in a subdirectory
 def get_project_lang(ext):
-    return list(Path(src_dir, project_choice).glob(f'**/*.{ext}'))
+    return list(Path(src_dir, project_choice).glob(f'*.{ext}'))
 
 
 def language_choice(project):
@@ -44,7 +42,7 @@ def language_choice(project):
                     lang_choice = index + 1
                     break
 
-            if 0 < lang_choice < 8:
+            if 0 < lang_choice < 9:
                 # Give backup_language the value of whatever langauge was found
                 backup_language = language_menu_items.get(lang_choice)
                 # TODO - Show progress of backup in a progress bar.
